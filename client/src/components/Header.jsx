@@ -14,7 +14,7 @@ export default function Header() {
             <li>Home</li>
           </Link>
           <Link to="/about">
-            <li>About</li>
+            <li>About</li> 
           </Link>
           <Link to="/profile">
             {currentUser ? (
