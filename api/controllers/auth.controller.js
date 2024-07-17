@@ -26,7 +26,7 @@ export const signin = async (req, res, next) => {
     const { password: hashedPassword, ...rest } = validUser._doc;
     const expiryDate = new Date(Date.now() + 3600000);
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .cookie('access_token', token, { httpOnly: true, expires: expiryDate })
       .status(200)
       .json(rest);
   } catch (error) {
@@ -41,7 +41,7 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: hashedPassword, ...rest } = user._doc;
       const expiryDate = new Date(Date.now() + 3600000);
-      res.cookie("access_token", token, {
+      res.cookie('access_token', token, {
         httpOnly: true,
         expires: expiryDate,
       }).status(200).json(rest);
@@ -62,7 +62,7 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: hashedPassword2, ...rest } = newUser._doc;
       const expiryDate = new Date(Date.now() + 3600000);
-      res.cookie("access_token", token, {
+      res.cookie('access_token', token, {
         httpOnly: true,
         expires: expiryDate,
       }).status(200).json(rest);
