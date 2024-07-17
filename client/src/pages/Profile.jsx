@@ -12,6 +12,9 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "../redux/user/userSlice";
 
 export default function Profile() {
@@ -36,7 +39,7 @@ export default function Profile() {
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, image);
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -78,6 +81,24 @@ export default function Profile() {
       dispatch(updateUserFailure(error));
     }
   };
+
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -111,7 +132,7 @@ export default function Profile() {
           ) : imagePercentage === 100 ? (
             <span className="text-green-700">Image uploaded successfully</span>
           ) : (
-            ''
+            ""
           )}
         </p>
         <input
@@ -142,7 +163,10 @@ export default function Profile() {
         </button>
       </form>
       <div className="flex justify-between mt-5 ">
-        <span className="text-red-700 cursor-pointer "> Delete Account</span>
+        <span onClick={handleDelete} className="text-red-700 cursor-pointer ">
+          {" "}
+          Delete Account
+        </span>
         <span className="text-red-700 cursor-pointer "> Sign Out</span>
       </div>
       <p className="text-red-700 mt-5 ">{error && "Something went wrong..."}</p>
